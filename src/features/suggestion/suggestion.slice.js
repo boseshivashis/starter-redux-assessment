@@ -4,14 +4,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 export const fetchSuggestion =
   createAsyncThunk(
     /* Task 15: Complete the `createAsyncThunk()` function to load a suggestion from this URL: http://localhost:3004/api/suggestion */
-    'suggestion/fetchSuggestion',
+    'photos/suggestion',
     async () => {
       const response = await fetch('http://localhost:3004/api/suggestion');
-      if (!response.ok) {
-        throw new Error('Failed to fetch suggestion');
-      }
       const data = await response.json();
-      return data;
+      return data.data;
     }
   );
 
@@ -25,22 +22,22 @@ const options = {
   name: 'suggestion',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers:  {
     // Task 16: Handle pending, fulfilled, and rejected states for fetchSuggestion()
-    builder
-      .addCase(fetchSuggestion.pending, (state) => {
+
+      [fetchSuggestion.pending]: (state) => {
         state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchSuggestion.fulfilled, (state, action) => {
+        state.error = false;
+      },
+      [fetchSuggestion.fulfilled]: (state) => {
         state.loading = false;
-        state.suggestion = action.payload;
-      })
-      .addCase(fetchSuggestion.rejected, (state, action) => {
+        state.error = false;
+      },
+      [fetchSuggestion.rejected]: (state) => {
         state.loading = false;
-        state.error = action.error.message;
-      });
-  }
+        state.error = true;
+      },
+    }
 };
 
 const suggestionSlice = createSlice(options);
