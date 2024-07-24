@@ -4,7 +4,6 @@ import photos from './photos.data.js';
 
 const initialState = {
   photos,
-  searchTerm: '',
 };
 
 const options = {
@@ -41,7 +40,9 @@ export const selectAllPhotos = (state) => state.photos.photos;
 export const selectFilteredPhotos = (state) => {
   // Task 12: Complete `selectFilteredPhotos()` selector to return a filtered list of photos whose captions match the user's search term
   const photos = state.photos.photos;
-  const searchTerm = state.photos.searchTerm.toLowerCase().trim();
+  const searchTerm = selectSearchTerm(state);
+
+  console.log("Search Term in photo.slice.js ", searchTerm.toLowerCase().trim());
 
   if (!searchTerm) {
     return photos; // Return all photos if no search term

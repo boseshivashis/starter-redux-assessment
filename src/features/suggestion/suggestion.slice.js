@@ -25,17 +25,18 @@ const options = {
   extraReducers:  {
     // Task 16: Handle pending, fulfilled, and rejected states for fetchSuggestion()
 
-      [fetchSuggestion.pending]: (state) => {
-        state.loading = true;
-        state.error = false;
-      },
-      [fetchSuggestion.fulfilled]: (state) => {
+    [fetchSuggestion.pending]: (state) => { 
+      state.loading = true; 
+      state.error = null; 
+    },
+      [fetchSuggestion.fulfilled]: (state, action) => {
         state.loading = false;
-        state.error = false;
+        state.error = null;
+        state.suggestion = action.payload;
       },
-      [fetchSuggestion.rejected]: (state) => {
+      [fetchSuggestion.rejected]: (state, action) => {
         state.loading = false;
-        state.error = true;
+        state.error = action.error.message;
       },
     }
 };
